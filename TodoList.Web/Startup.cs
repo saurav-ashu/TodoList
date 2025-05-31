@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,9 +13,9 @@ namespace TodoList.Web
     public class Startup
     {
         public IConfiguration Configuration { get; }
-        public IHostingEnvironment Environment { get; }
+        public IWebHostEnvironment Environment { get; }
 
-        public Startup(IHostingEnvironment environment)
+        public Startup(IWebHostEnvironment environment)
         {
             Configuration = new ConfigurationBuilder()
                 .SetBasePath(environment.ContentRootPath)
@@ -40,18 +41,15 @@ namespace TodoList.Web
             services.ConfigureServices();
             services.ConfigureSendGrid(Configuration);
             services.AddLogging();
-            services.AddMvc()
-                .SetCompatibilityVersion(Microsoft.AspNetCore.Mvc.CompatibilityVersion.Version_2_2);
+            services.AddMvc();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
-                app.UseBrowserLink();
                 app.UseDeveloperExceptionPage();
-                app.UseDatabaseErrorPage();
             }
             else
             {
@@ -81,11 +79,14 @@ namespace TodoList.Web
                 SupportedUICultures = supportedCultures
             });
 
-            app.UseMvc(routes =>
+            app.UseRouting();
+            app.UseAuthorization(); // Ensure UseAuthentication and UseAuthorization are in the correct order
+
+            app.UseEndpoints(endpoints =>
             {
-                routes.MapRoute(
+                endpoints.MapControllerRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
             });
         }
     }

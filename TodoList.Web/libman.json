@@ -13,8 +13,8 @@
       "destination": "wwwroot/lib/moment.js/"
     },
     {
-      "provider": "unpkg",
-      "library": "bootstrap@4.0.0",
+      "provider": "cdnjs",
+      "library": "twitter-bootstrap@4.0.0",
       "destination": "wwwroot/lib/bootstrap/"
     },
     {
