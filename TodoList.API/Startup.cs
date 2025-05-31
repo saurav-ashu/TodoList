@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using TodoList.API.Extensions;
@@ -17,7 +18,7 @@ namespace TodoList.API
     public class Startup
     {
         private readonly ILogger<Startup> _logger;
-        public Startup(IHostingEnvironment hostingContext, ILogger<Startup> logger, IConfiguration configuration)
+        public Startup(IWebHostEnvironment hostingContext, ILogger<Startup> logger, IConfiguration configuration)
         {
             Configuration = configuration;
 
@@ -36,11 +37,11 @@ namespace TodoList.API
             services.ConfigureStorage(Configuration, _logger);
             services.ConfigureAutoMapper(_logger);
             services.ConfigureSwagger(_logger);
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddMvc();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -62,7 +63,12 @@ namespace TodoList.API
                 o.SwaggerEndpoint("/swagger/v1/swagger.json", "TodoList Api v1");
             });
 
-            app.UseMvc();
+            app.UseRouting();
+            app.UseAuthorization();
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
         }
     }
 }

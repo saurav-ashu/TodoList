@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using Microsoft.AspNetCore.Mvc.ViewFeatures.Buffers;
 using Microsoft.Extensions.Logging;
 using Moq;
 using System;
@@ -61,7 +62,7 @@ namespace TodoList.UnitTests.Controllers
             servicesMock.Setup(serviceProvider => serviceProvider.GetService(typeof(IUrlHelperFactory)))
                 .Returns(new UrlHelperFactory());
             servicesMock.Setup(serviceProvider => serviceProvider.GetService(typeof(ITempDataDictionaryFactory)))
-                .Returns(new TempDataDictionaryFactory(new SessionStateTempDataProvider()));
+                .Returns(new TempDataDictionaryFactory(Mock.Of<ITempDataProvider>()));
             servicesMock.Setup(serviceProvider => serviceProvider.GetService(typeof(IPrincipal)))
                 .Returns(new ClaimsPrincipal());
 

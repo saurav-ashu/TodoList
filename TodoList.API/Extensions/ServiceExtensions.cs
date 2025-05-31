@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using NodaTime;
+using Microsoft.OpenApi.Models;
 using Npgsql;
 using Swashbuckle.AspNetCore.Swagger;
 using TodoList.API.MapperProfiles;
@@ -43,7 +44,7 @@ namespace TodoList.API.Extensions
         {
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new Info {Title = "TodoList API", Version = "v1"});
+                c.SwaggerDoc("v1", new OpenApiInfo {Title = "TodoList API", Version = "v1"});
             });
             logger.LogInformation("Configured Swagger.");
         }

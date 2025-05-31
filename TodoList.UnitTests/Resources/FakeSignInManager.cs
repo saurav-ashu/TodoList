@@ -16,7 +16,8 @@ namespace TodoList.UnitTests.Resources
             new Mock<IUserClaimsPrincipalFactory<ApplicationUser>>().Object,
             new Mock<IOptions<IdentityOptions>>().Object,
             new Mock<ILogger<SignInManager<ApplicationUser>>>().Object,
-            new Mock<IAuthenticationSchemeProvider>().Object)
+                 new Mock<IAuthenticationSchemeProvider>().Object,
+                 new Mock<IUserConfirmation<ApplicationUser>>().Object)  // Added mock for IUserConfirmation
         { }
     }
 }
